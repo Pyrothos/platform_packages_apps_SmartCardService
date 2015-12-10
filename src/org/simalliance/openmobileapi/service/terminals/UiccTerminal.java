@@ -63,9 +63,7 @@ public class UiccTerminal extends Terminal {
 
     @Override
     public boolean isCardPresent() throws CardException {
-        String simState = SystemProperties
-                .get(TelephonyProperties.PROPERTY_SIM_STATE);
-        return simState.equals("READY");
+        return manager != null && manager.hasIccCard();
     }
 
     @Override
@@ -165,14 +163,20 @@ public class UiccTerminal extends Terminal {
 
     @Override
     public byte[] getAtr() {
-        if (mAtr == null) {
-            String atr = manager.iccGetAtr();
-            Log.d(TAG, "atr = " + atr == null ? "" : atr);
-            if (atr != null && atr != "") {
-                mAtr = stringToByteArray(atr);
-            }
-        }
-        return mAtr;
+        // if (mAtr == null) {
+        // String atr = manager.iccGetAtr();
+        // Log.d(TAG, "atr = " + atr == null ? "" : atr);
+        // if (atr != null && atr != "") {
+        // mAtr = stringToByteArray(atr);
+        // }
+        // }
+        // return mAtr;
+
+        //
+        // As unmodified TelephonyManager doesn't give us access to the ATR
+        // and we want to keep the system unmodified, we just return null.
+        //
+        return null;
     }
 
     /**

@@ -140,7 +140,19 @@ public class SEService {
             }
         };
 
+        /**
+         * IMPORTANT: Since Android 5.0 (Build.VERSION_CODES.LOLLIPOP),
+         * implicit Intents for binding services may no longer be used (for
+         * security reasons) and will throw an IllegalArgumentException.
+         *
+         * For this reason I add an explicit package and class name to the
+         * intent which is used for binding to the SmartcardService
+         * (before only the classname was used as Intent action string).
+         */
         Intent intent = new Intent(ISmartcardService.class.getName());
+        // Set explicit package and class name:
+        intent.setClassName("org.simalliance.openmobileapi.service",
+                                   "org.simalliance.openmobileapi.service.SmartcardService");
         boolean bindingSuccessful = mContext.bindService(intent, mConnection,
                 Context.BIND_AUTO_CREATE);
         if (bindingSuccessful) {
